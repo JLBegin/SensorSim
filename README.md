@@ -1,6 +1,6 @@
 # SensorSim
 
-Sensor simulation plug-in for our 3D engine at DCC-Lab/PyTissueOptics
+Sensor simulation plug-in for our 3D engine at [DCC-Lab/PyTissueOptics](https://github.com/DCC-Lab/PyTissueOptics)
 
 ### LiDAR 
 ```python
