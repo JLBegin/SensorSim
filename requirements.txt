@@ -1,0 +1,5 @@
+numpy
+mockito
+ddt
+pyqt5
+mayavi
