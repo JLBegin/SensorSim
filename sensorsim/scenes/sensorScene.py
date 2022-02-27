@@ -20,3 +20,8 @@ class SensorScene:
         sensor = Sphere(0.3, order=2, position=Vector(0, 4, 0))
         podA = Cuboid(0.07, 4, 0.07, position=Vector(0, 2, 0))
         return [sensor, podA]
+
+    def display(self):
+        viewer = MayaviViewer()
+        self.addToViewer(viewer)
+        viewer.show()
