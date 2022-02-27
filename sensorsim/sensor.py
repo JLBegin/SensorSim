@@ -1,11 +1,11 @@
 from pytissueoptics.scene import MayaviViewer
 from pytissueoptics.scene.logger import Logger
+from sensorsim.lidars import LiDAR
 from sensorsim.scenes.phantom import SensorScene
-from sensorsim.source import Source
 
 
 class Sensor:
-    def __init__(self, source: Source = Source()):
+    def __init__(self, source: LiDAR = LiDAR()):
         self._logger = Logger()
         self._source = source
         self._scene = None
@@ -14,7 +14,7 @@ class Sensor:
         self._scene = scene
         self._source.propagate(scene, logger=self._logger)
 
-    def display(self, showScene=True, showSensor=True):
+    def display(self, showScene=False, showSensor=False):
         mViewer = MayaviViewer()
         mViewer.addLogger(self._logger, colormap="inferno", reverseColormap=False)
         if showScene:
