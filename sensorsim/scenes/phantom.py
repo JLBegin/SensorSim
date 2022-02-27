@@ -1,6 +1,6 @@
 from pytissueoptics.scene import *
 
-from sensorsim.materials import Concrete, ReflectiveFilm, StainlessSteel, ReflectivePaint
+from sensorsim.materials import *
 from sensorsim.scenes.sensorScene import SensorScene
 
 
@@ -19,7 +19,7 @@ class PhantomScene(SensorScene):
         viewer.add(*self.ROOM[:-1], representation="surface", colormap="bone")
         viewer.add(self.ROOM[-1], representation="surface", colormap="bone", reverseColormap=True)
         viewer.add(*self.CROSSWALK, *self.OBJECTS, *self.SIGN, representation="surface", colormap="Set2",
-                   reverseColormap=True, lutMode="cell data")
+                   reverseColormap=True, constantColor=True)
 
     @property
     def solids(self):
