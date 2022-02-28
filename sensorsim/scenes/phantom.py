@@ -56,7 +56,7 @@ class PhantomScene(SensorScene):
         cubeC = Cube(1, position=Vector(-5, 3.866, -6), material=ReflectivePaint())
         cubeC.rotate(0, 0, 45)
         cubeC.rotate(45, 0, 0)
-        sphere = Sphere(0.75, order=2, position=Vector(5, 3.75, -6), material=Chrome())
+        sphere = Sphere(0.75, order=2, position=Vector(5, 3.75, -6), material=StainlessSteel())
         return [cubeA, cubeB, cubeC, sphere]
 
     def _sign(self):

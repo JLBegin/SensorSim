@@ -6,16 +6,15 @@ from sensorsim import scenes
 from sensorsim.cameras import Camera
 
 scene = scenes.PhantomScene()
-# scene.display()
 
-camera = Camera(position=Vector(-1.5, 2, -1.5), direction=Vector(-1, 0, -1), horizontalResolution=200)
-image = camera.capture(scene)
+camera = Camera(position=Vector(-1.5, 2, -1.5), direction=Vector(-1, 0, -1), horizontalResolution=640)
+imageL = camera.capture(scene)
 
-plt.imshow(image/np.max(image))
-plt.show()
+camera = Camera(position=Vector(1.5, 2, -1.5), direction=Vector(1, 0, -1), horizontalResolution=640)
+imageR = camera.capture(scene)
 
-camera = Camera(position=Vector(1.5, 2, -1.5), direction=Vector(1, 0, -1), horizontalResolution=200)
-image = camera.capture(scene)
-
-plt.imshow(image/np.max(image))
+fig, [axL, axR] = plt.subplots(1, 2)
+vmax = np.max([imageL, imageR])
+axL.imshow(imageL/vmax)
+axR.imshow(imageR/vmax)
 plt.show()

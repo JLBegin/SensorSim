@@ -1,11 +1,8 @@
-from sensorsim import Sensor, scenes
-from sensorsim.lidars import LiDAR
+from sensorsim import AVSuite, scenes
 
 scene = scenes.PhantomScene()
 scene.display()
 
-lidar = Sensor(source=LiDAR())
-
-lidar.capture(scene)
-
-lidar.display()
+sensors = AVSuite()
+sensors.capture(scene)
+sensors.display()
