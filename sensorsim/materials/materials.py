@@ -1,6 +1,6 @@
 import math
 
-from pytissueoptics.scene import Material
+from pytissueoptics.scene import Material, Vector
 
 
 class DiffuseMaterial(Material):
@@ -12,12 +12,27 @@ class DiffuseMaterial(Material):
         self._ks = 1 - roughness
         self._n = specularIntensity
 
-    def retroReflectionAt(self, angle: float) -> float:
+    def retroReflectionAt(self, lightDirection: Vector, normal: Vector) -> float:
         """ Using Blinn-Phong illumination model without ambient lighting and view angle same as illumination angle
         for a single light source. Input angle is between surface normal and illumination, in radians. """
-        diffuseReflection = self._kd * math.cos(angle)
-        specularReflection = self._ks * math.cos(angle)**self._n
+        return self.reflectionAt(viewDirection=lightDirection, lightDirection=lightDirection, normal=normal)
+
+    def reflectionAt(self, viewDirection: Vector, lightDirection: Vector, normal: Vector) -> float:
+        """ Using Blinn-Phong illumination model without ambient lighting for a single light source.
+        Expects viewDirection and lightDirection to point towards the surface (negative dot product with normal). """
+        R = self._getReflected(lightDirection, normal)
+        diffuseReflection = self._kd * (-normal.dot(lightDirection))
+        specularReflection = self._ks * (-R.dot(viewDirection))**self._n
         return self._R * (diffuseReflection + specularReflection)
+
+    @staticmethod
+    def _getIncidenceAngle(vector: Vector, normal: Vector) -> float:
+        """ Expects dot product to be negative. """
+        return math.acos(-normal.dot(vector))
+
+    @staticmethod
+    def _getReflected(vector: Vector, normal: Vector):
+        return vector - normal * 2 * vector.dot(normal)
 
 
 class ReflectiveFilm(DiffuseMaterial):
@@ -25,16 +40,24 @@ class ReflectiveFilm(DiffuseMaterial):
     def __init__(self, reflectance=0.58):
         super().__init__(reflectance=reflectance)
 
-    def retroReflectionAt(self, angle: float) -> float:
-        return self._R * math.cos(angle) ** 0.5
+    def retroReflectionAt(self, lightDirection: Vector, normal: Vector) -> float:
+        return self._R * (-normal.dot(lightDirection)) ** 0.5
+
+    @staticmethod
+    def _getReflected(vector: Vector, normal: Vector):
+        return vector * -1
 
 
 class ReflectivePaint(DiffuseMaterial):
     def __init__(self, reflectance=0.4):
         super().__init__(reflectance=reflectance)
 
-    def retroReflectionAt(self, angle: float) -> float:
-        return self._R * math.cos(angle) ** 0.8
+    def retroReflectionAt(self, lightDirection: Vector, normal: Vector) -> float:
+        return self._R * (-normal.dot(lightDirection)) ** 0.8
+
+    @staticmethod
+    def _getReflected(vector: Vector, normal: Vector):
+        return vector * -1
 
 
 class Concrete(DiffuseMaterial):
