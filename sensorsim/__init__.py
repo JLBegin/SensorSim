@@ -1,1 +1,1 @@
-from .sensor import Sensor
+from .sensors import ScanningSensor, AVSuite
