@@ -80,10 +80,10 @@ class ReflectiveFilm(DiffuseMaterial):
 
 class ReflectivePaint(DiffuseMaterial):
     def __init__(self):
-        super().__init__(reflectance=0.4, roughness=0.6, specularIntensity=10, color=Color.SAFETY_YELLOW)
+        super().__init__(reflectance=0.45, roughness=0.6, specularIntensity=10, color=Color.SAFETY_YELLOW)
 
     def retroReflectionAt(self, lightDirection: Vector, normal: Vector) -> float:
-        return self._R * (-normal.dot(lightDirection)) ** 0.8
+        return self._R * (-normal.dot(lightDirection)) ** 0.5
 
     @staticmethod
     def _getReflected(vector: Vector, normal: Vector):
@@ -97,12 +97,12 @@ class Concrete(DiffuseMaterial):
 
 class StainlessSteel(DiffuseMaterial):
     def __init__(self):
-        super().__init__(reflectance=0.5, roughness=0.5, color=Color.SILVER)
+        super().__init__(reflectance=0.4, roughness=0.6, color=Color.SILVER)
 
 
 class Chrome(DiffuseMaterial):
     def __init__(self):
-        super().__init__(reflectance=0.60, color=Color.CHROME)
+        super().__init__(reflectance=0.60, roughness=0.3, color=Color.CHROME)
 
 
 class Plywood(DiffuseMaterial):
