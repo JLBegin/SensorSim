@@ -36,8 +36,11 @@ class Camera(UniformRaySource):
 
     def _measurePixel(self, ray: Ray, intersection: Intersection, light: Light) -> list:
         lightDirection = intersection.position - light.position
+        distance = lightDirection.getNorm()
         lightDirection.normalize()
         reflectance = intersection.polygon.insideMaterial.reflectionAt(viewDirection=ray.direction,
                                                                        lightDirection=lightDirection,
                                                                        normal=intersection.polygon.normal)
+        attenuation = 1/distance
+        reflectance *= attenuation
         return [c*reflectance for c in intersection.polygon.insideMaterial.color]
