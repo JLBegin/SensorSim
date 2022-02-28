@@ -1,6 +1,7 @@
 from pytissueoptics.scene import *
+from sensorsim.light import Light
 
-from sensorsim.materials import Concrete, ReflectiveFilm, StainlessSteel, ReflectivePaint
+from sensorsim.materials import *
 from sensorsim.scenes.sensorScene import SensorScene
 
 
@@ -14,16 +15,22 @@ class PhantomScene(SensorScene):
     def __init__(self):
         self._create()
         self._solids = [*self.ROOM, *self.CROSSWALK, *self.OBJECTS, *self.SIGN]
+        self._light = Light(Vector(0, 8, 0))
 
     def addToViewer(self, viewer: MayaviViewer):
         viewer.add(*self.ROOM[:-1], representation="surface", colormap="bone")
         viewer.add(self.ROOM[-1], representation="surface", colormap="bone", reverseColormap=True)
         viewer.add(*self.CROSSWALK, *self.OBJECTS, *self.SIGN, representation="surface", colormap="Set2",
-                   reverseColormap=True, lutMode="cell data")
+                   reverseColormap=True, constantColor=True)
 
     @property
     def solids(self):
         return self._solids
+
+    @property
+    def light(self):
+        # todo: rename to lighting when proper lighting object will exist
+        return self._light
 
     def _create(self):
         self.ROOM = self._room()
@@ -40,11 +47,11 @@ class PhantomScene(SensorScene):
         return [floor, leftWall, rightWall, backWall]
 
     def _crossWalk(self):
-        return [Cuboid(0.7, 0.001, 4, position=Vector(-i, 0, -8), material=ReflectivePaint()) for i in range(-5, 4)]
+        return [Cuboid(0.7, 0.001, 4, position=Vector(i, 0, -8), material=ReflectivePaint()) for i in range(-5, 5)]
 
     def _objects(self):
-        cubeA = Cube(3, position=Vector(-5, 3/2, -6), material=self._baseMaterial)
-        cubeB = Cube(3, position=Vector(5, 3/2, -6), material=self._baseMaterial)
+        cubeA = Cube(3, position=Vector(-5, 3/2, -6), material=Plywood())
+        cubeB = Cube(3, position=Vector(5, 3/2, -6), material=Plywood())
         cubeB.rotate(0, 20, 0)
         cubeC = Cube(1, position=Vector(-5, 3.866, -6), material=ReflectivePaint())
         cubeC.rotate(0, 0, 45)
