@@ -4,7 +4,7 @@ from pytissueoptics.scene import Material, Vector
 
 
 class DiffuseMaterial(Material):
-    def __init__(self, reflectance: float = 0.30, roughness: float = 0.7, specularIntensity: float = 50):
+    def __init__(self, reflectance: float = 0.30, roughness: float = 0.7, specularIntensity: float = 10):
         assert 0.0 <= reflectance <= 1.0
         assert 0.0 <= roughness <= 1.0
         self._R = reflectance
@@ -37,8 +37,8 @@ class DiffuseMaterial(Material):
 
 class ReflectiveFilm(DiffuseMaterial):
     """ https://www.researchgate.net/publication/251610177_Photographic_assessment_of_retroreflective_film_properties. """
-    def __init__(self, reflectance=0.58):
-        super().__init__(reflectance=reflectance)
+    def __init__(self):
+        super().__init__(reflectance=0.58, roughness=0.4, specularIntensity=5)
 
     def retroReflectionAt(self, lightDirection: Vector, normal: Vector) -> float:
         return self._R * (-normal.dot(lightDirection)) ** 0.5
@@ -49,8 +49,8 @@ class ReflectiveFilm(DiffuseMaterial):
 
 
 class ReflectivePaint(DiffuseMaterial):
-    def __init__(self, reflectance=0.4):
-        super().__init__(reflectance=reflectance)
+    def __init__(self):
+        super().__init__(reflectance=0.4, roughness=0.6, specularIntensity=10)
 
     def retroReflectionAt(self, lightDirection: Vector, normal: Vector) -> float:
         return self._R * (-normal.dot(lightDirection)) ** 0.8
