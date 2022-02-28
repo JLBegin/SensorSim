@@ -6,7 +6,7 @@ import numpy as np
 from pytissueoptics.scene import Vector
 from pytissueoptics.scene.intersection import SimpleIntersectionFinder, Ray
 from pytissueoptics.scene.intersection.intersectionFinder import Intersection
-from sensorsim.light import UniformRaySource
+from sensorsim.light import UniformRaySource, Light
 from sensorsim.scenes.sensorScene import SensorScene
 
 
@@ -24,7 +24,7 @@ class AspectRatio(Enum):
 
 
 class Camera(UniformRaySource):
-    def __init__(self, position=Vector(2, 2, -2), direction=Vector(1, 0, -1), horizontalFOV: float = 150,
+    def __init__(self, position=Vector(0, 4, 0), direction=Vector(0, 0, -1), horizontalFOV: float = 120,
                  horizontalResolution: int = 640, aspectRatio: AspectRatio = AspectRatio.FOUR_THIRDS):
         super().__init__(position, direction, horizontalFOV, horizontalFOV/aspectRatio.value,
                          horizontalResolution, int(horizontalResolution/aspectRatio.value))
@@ -37,16 +37,15 @@ class Camera(UniformRaySource):
             if not intersection:
                 pixels.append((0, 0, 0))
                 continue
-            pixels.append(self._measurePixel(ray, intersection))
+            pixels.append(self._measurePixel(ray, intersection, scene.light))
         image = np.reshape(pixels, (*self._resolution, 3))
         image = np.fliplr(np.rot90(image))
-        # image = np.moveaxis(image, 0, 1)
         return image
 
-    def _measurePixel(self, ray: Ray, intersection: Intersection) -> tuple:
-        surfaceNormal = intersection.polygon.normal
-        angle = math.acos(-surfaceNormal.dot(ray.direction))
-
-        reflectance = intersection.polygon.insideMaterial.retroReflectionAt(angle)
-        # fixme: switch to reflection(sourceAngle, viewAngle)
+    def _measurePixel(self, ray: Ray, intersection: Intersection, light: Light) -> tuple:
+        lightDirection = intersection.position - light.position
+        lightDirection.normalize()
+        reflectance = intersection.polygon.insideMaterial.reflectionAt(viewDirection=ray.direction,
+                                                                       lightDirection=lightDirection,
+                                                                       normal=intersection.polygon.normal)
         return reflectance, reflectance, reflectance
