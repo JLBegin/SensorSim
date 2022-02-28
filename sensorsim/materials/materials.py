@@ -34,6 +34,7 @@ class DiffuseMaterial(Material):
         self._R = reflectance
         self._kd = roughness
         self._ks = 1 - roughness
+        self._ka = 0.1
         self._n = specularIntensity
         self._color = color.value
 
@@ -48,7 +49,7 @@ class DiffuseMaterial(Material):
         R = self._getReflected(lightDirection, normal)
         diffuseReflection = self._kd * (-normal.dot(lightDirection))
         specularReflection = self._ks * (-R.dot(viewDirection))**self._n
-        return self._R * (diffuseReflection + specularReflection)
+        return self._R * (diffuseReflection + specularReflection) + self._ka
 
     @staticmethod
     def _getIncidenceAngle(vector: Vector, normal: Vector) -> float:
