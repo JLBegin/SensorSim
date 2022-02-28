@@ -10,14 +10,6 @@ from sensorsim.light import UniformRaySource, Light
 from sensorsim.scenes.sensorScene import SensorScene
 
 
-class Color(Enum):
-    RED = (1, 0, 0)
-    GREEN = (0, 1, 0)
-    BLUE = (0, 0, 1)
-    WHITE = (1, 1, 1)
-    BLACK = (0, 0, 0)
-
-
 class AspectRatio(Enum):
     FOUR_THIRDS = 4/3
     WIDESCREEN = 16/9
@@ -42,10 +34,10 @@ class Camera(UniformRaySource):
         image = np.fliplr(np.rot90(image))
         return image
 
-    def _measurePixel(self, ray: Ray, intersection: Intersection, light: Light) -> tuple:
+    def _measurePixel(self, ray: Ray, intersection: Intersection, light: Light) -> list:
         lightDirection = intersection.position - light.position
         lightDirection.normalize()
         reflectance = intersection.polygon.insideMaterial.reflectionAt(viewDirection=ray.direction,
                                                                        lightDirection=lightDirection,
                                                                        normal=intersection.polygon.normal)
-        return reflectance, reflectance, reflectance
+        return [c*reflectance for c in intersection.polygon.insideMaterial.color]

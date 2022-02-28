@@ -1,1 +1,1 @@
-from .materials import DiffuseMaterial, Concrete, ReflectiveFilm, StainlessSteel, ReflectivePaint
+from .materials import DiffuseMaterial, Concrete, ReflectiveFilm, StainlessSteel, ReflectivePaint, Chrome, Plywood

@@ -50,13 +50,13 @@ class PhantomScene(SensorScene):
         return [Cuboid(0.7, 0.001, 4, position=Vector(i, 0, -8), material=ReflectivePaint()) for i in range(-5, 5)]
 
     def _objects(self):
-        cubeA = Cube(3, position=Vector(-5, 3/2, -6), material=self._baseMaterial)
-        cubeB = Cube(3, position=Vector(5, 3/2, -6), material=self._baseMaterial)
+        cubeA = Cube(3, position=Vector(-5, 3/2, -6), material=Plywood())
+        cubeB = Cube(3, position=Vector(5, 3/2, -6), material=Plywood())
         cubeB.rotate(0, 20, 0)
         cubeC = Cube(1, position=Vector(-5, 3.866, -6), material=ReflectivePaint())
         cubeC.rotate(0, 0, 45)
         cubeC.rotate(45, 0, 0)
-        sphere = Sphere(0.75, order=2, position=Vector(5, 3.75, -6), material=StainlessSteel())
+        sphere = Sphere(0.75, order=2, position=Vector(5, 3.75, -6), material=Chrome())
         return [cubeA, cubeB, cubeC, sphere]
 
     def _sign(self):
