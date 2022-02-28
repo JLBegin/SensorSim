@@ -38,15 +38,11 @@ class ScanningSensor(Sensor):
         mViewer.show()
 
 
-class AVSuite(Sensor):
-    def __init__(self, position=Vector(0, 0, 0)):
-        self._position = position
-        self._lidars = [ScanningSensor(source=LiDAR(position=Vector(0, 4, 0) + self._position))]
-        self._radars = []
-        self._cameras = [Camera(position=Vector(-1.5, 2, -1.5) + self._position, direction=Vector(-1, 0, -1),
-                                horizontalResolution=640, horizontalFOV=120),
-                         Camera(position=Vector(1.5, 2, -1.5) + self._position, direction=Vector(1, 0, -1),
-                                horizontalResolution=640, horizontalFOV=120)]
+class SensorSuite(Sensor):
+    def __init__(self, lidars=[], radars=[], cameras=[]):
+        self._lidars = lidars
+        self._radars = radars
+        self._cameras = cameras
         self._scene = None
         self._images = []
 
@@ -72,3 +68,14 @@ class AVSuite(Sensor):
         for i, image in enumerate(self._images):
             axes[i].imshow(image / vmax)
         plt.show()
+
+
+class AVSuite(SensorSuite):
+    def __init__(self, position=Vector(0, 0, 0)):
+        self._position = position
+        lidar360 = ScanningSensor(source=LiDAR(position=Vector(0, 4, 0) + self._position))
+        frontLeftCamera = Camera(position=Vector(-1.5, 2, -1.5) + self._position, direction=Vector(-1, 0, -1),
+                                 horizontalResolution=640, horizontalFOV=120)
+        frontRightCamera = Camera(position=Vector(1.5, 2, -1.5) + self._position, direction=Vector(1, 0, -1),
+                                  horizontalResolution=640, horizontalFOV=120)
+        super().__init__(lidars=[lidar360], cameras=[frontLeftCamera, frontRightCamera])
