@@ -2,11 +2,16 @@ from typing import List
 
 from pytissueoptics.scene import *
 from pytissueoptics.scene.solids import Solid
+from sensorsim.light import Light
 
 
 class SensorScene:
     @property
     def solids(self) -> List[Solid]:
+        raise NotImplementedError
+
+    @property
+    def light(self) -> Light:
         raise NotImplementedError
 
     def addToViewer(self, viewer: MayaviViewer):

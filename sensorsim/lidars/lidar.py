@@ -41,10 +41,8 @@ class LiDAR(UniformRaySource):
 
     def _measureSignal(self, ray: Ray, intersection: Intersection) -> float:
         intersection.position += ray.direction * self._distanceNoiseAt(intersection.distance)
-
-        surfaceNormal = intersection.polygon.normal
-        angle = math.acos(-surfaceNormal.dot(ray.direction))
-        reflectance = intersection.polygon.insideMaterial.retroReflectionAt(angle)
+        reflectance = intersection.polygon.insideMaterial.retroReflectionAt(ray.direction,
+                                                                            normal=intersection.polygon.normal)
         return self._intensityAt(intersection.distance) * reflectance
 
     def _distanceNoiseAt(self, distance: float) -> Vector:
