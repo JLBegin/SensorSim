@@ -61,7 +61,12 @@ class ReflectivePaint(DiffuseMaterial):
         super().__init__(reflectance=0.45, roughness=0.6, specularIntensity=10, color=Color.SAFETY_YELLOW)
 
     def retroReflectionAt(self, lightDirection: Vector, normal: Vector) -> float:
-        return self._R * (-normal.dot(lightDirection)) ** 0.5
+        p = normal.dot(lightDirection)
+        if p > 0:
+            print("Positive dot")
+            return 0
+
+        return self._R * (-p) ** 0.5
 
     @staticmethod
     def _getReflected(vector: Vector, normal: Vector):
