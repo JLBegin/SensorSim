@@ -63,6 +63,9 @@ class SensorSuite(Sensor):
         for radar in self._radars:
             radar.display(showScene=showScene, showSensor=showSensor)
 
+        if len(self._images) == 0:
+            return
+
         fig, axes = plt.subplots(1, len(self._images))
         vmax = np.max(self._images) * 1.2
         for i, image in enumerate(self._images):

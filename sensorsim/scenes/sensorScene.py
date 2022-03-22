@@ -5,10 +5,9 @@ from pytissueoptics.scene.solids import Solid
 from sensorsim.light import Light
 
 
-class SensorScene:
-    @property
-    def solids(self) -> List[Solid]:
-        raise NotImplementedError
+class SensorScene(Scene):
+    def __init__(self):
+        super().__init__(ignoreIntersections=True)
 
     @property
     def light(self) -> Light:

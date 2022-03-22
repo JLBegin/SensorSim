@@ -13,6 +13,7 @@ class PhantomScene(SensorScene):
     SIGN = []
 
     def __init__(self):
+        super().__init__()
         self._create()
         self._solids = [*self.ROOM, *self.CROSSWALK, *self.OBJECTS, *self.SIGN]
         self._light = Light(Vector(0, 8, 0))
@@ -22,10 +23,6 @@ class PhantomScene(SensorScene):
         viewer.add(self.ROOM[-1], representation="surface", colormap="bone", reverseColormap=True)
         viewer.add(*self.CROSSWALK, *self.OBJECTS, *self.SIGN, representation="surface", colormap="Set2",
                    reverseColormap=True, constantColor=True)
-
-    @property
-    def solids(self):
-        return self._solids
 
     @property
     def light(self):
