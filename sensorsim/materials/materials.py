@@ -24,8 +24,13 @@ class DiffuseMaterial(Material):
     def reflectionAt(self, viewDirection: Vector, lightDirection: Vector, normal: Vector) -> float:
         """ Using Blinn-Phong illumination model without ambient lighting for a single light source.
         Expects viewDirection and lightDirection to point towards the surface (negative dot product with normal). """
+        p = normal.dot(lightDirection)
+        if p > 0:
+            print("Positive dot")
+            return 0
+
         R = self._getReflected(lightDirection, normal)
-        diffuseReflection = self._kd * (-normal.dot(lightDirection))
+        diffuseReflection = self._kd * (-p)
         specularReflection = self._ks * (-R.dot(viewDirection))**self._n
         return self._R * (diffuseReflection + specularReflection) + self._ka
 
@@ -49,7 +54,11 @@ class ReflectiveFilm(DiffuseMaterial):
         super().__init__(reflectance=0.58, roughness=0.4, specularIntensity=5, color=Color.SAFETY_YELLOW)
 
     def retroReflectionAt(self, lightDirection: Vector, normal: Vector) -> float:
-        return self._R * (-normal.dot(lightDirection)) ** 0.5
+        p = normal.dot(lightDirection)
+        if p > 0:
+            print("Positive dot")
+            return 0
+        return self._R * (-p) ** 0.5
 
     @staticmethod
     def _getReflected(vector: Vector, normal: Vector):
