@@ -30,7 +30,7 @@ class LiDAR(UniformRaySource):
                 super()._createRayAt(xTheta + dx, yTheta + dy)
 
     def propagate(self, scene: SensorScene, logger: Logger = None):
-        intersectionFinder = SimpleIntersectionFinder(scene.solids)
+        intersectionFinder = SimpleIntersectionFinder(scene)
         for ray in self._rays:
             intersection = intersectionFinder.findIntersection(ray)
             if not intersection:

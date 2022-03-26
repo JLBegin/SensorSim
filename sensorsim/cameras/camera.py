@@ -22,7 +22,7 @@ class Camera(UniformRaySource):
                          horizontalResolution, int(horizontalResolution/aspectRatio.value))
 
     def capture(self, scene: SensorScene) -> np.ndarray:
-        intersectionFinder = SimpleIntersectionFinder(scene.solids)
+        intersectionFinder = SimpleIntersectionFinder(scene)
         pixels = []
         for ray in self._rays:
             intersection = intersectionFinder.findIntersection(ray)
